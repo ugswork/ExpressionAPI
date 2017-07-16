@@ -33,6 +33,21 @@ class ExpressionAPI(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
+    def get_expressionMatrix(self, params, context=None):
+        """
+        :param params: instance of type "getExprMatrixParams" (* Following
+           are the required input parameters to get Expression Matrix *) ->
+           structure: parameter "workspace_name" of String, parameter
+           "output_obj_name" of String, parameter "expressionset_ref" of
+           String
+        :returns: instance of type "getExprMatrixOutput" -> structure:
+           parameter "exprMatrix_FPKM_ref" of String, parameter
+           "exprMatrix_TPM_ref" of String
+        """
+        return self._client.call_method(
+            'ExpressionAPI.get_expressionMatrix',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('ExpressionAPI.status',
                                         [], self._service_ver, context)
