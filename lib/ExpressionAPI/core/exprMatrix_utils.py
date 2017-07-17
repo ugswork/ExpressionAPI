@@ -5,8 +5,6 @@ from pprint import pprint, pformat
 from Workspace.WorkspaceClient import Workspace
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from DataFileUtil.baseclient import ServerError as DFUError
-#from KBaseFeatureValues.KBaseFeatureValuesClient import KBaseFeatureValues
-#from SetAPI.SetAPIClient import SetAPI
 
 class ExprMatrixUtils:
     """
@@ -25,8 +23,6 @@ class ExprMatrixUtils:
         self.ws_url = config['workspace-url']
         self.ws_client = Workspace(self.ws_url)
         self.dfu = DataFileUtil(self.callback_url)
-        #self.fv = KBaseFeatureValues(self.callback_url)
-        #self.setAPI = SetAPI(self.callback_url)
         pass
 
     def process_params(self, params):
