@@ -67,11 +67,7 @@ class ExpressionAPI:
         # return variables are: returnVal
         #BEGIN get_expressionMatrix
 
-        print('Calling expr matrix utils ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
         fpkm_ref, tpm_ref = self.expr_matrix_utils.get_expression_matrix(params)
-
-        print('????????????????????  fpkem_ref: ' + fpkm_ref)
-        print('????????????????????  tpm_ref: ' + tpm_ref)
 
         returnVal = {'exprMatrix_FPKM_ref': fpkm_ref,
                      'exprMatrix_TPM_ref': tpm_ref}

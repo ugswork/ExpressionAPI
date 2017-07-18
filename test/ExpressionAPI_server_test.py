@@ -76,7 +76,7 @@ class ExpressionAPITest(unittest.TestCase):
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
     # Following test uses object refs from a narrative. Comment the next line to run the test
     #@unittest.skip("skipped test_cuffdiff_RNASeq_objects_success")
-    def test_get_expr_matrix_RNASeq_objects_success(self):
+    def test_get_expr_matrix_RNASeq_object_success(self):
         """
         Input object: downsized_AT_reads_tophat_AlignmentSet_cufflinks_ExpressionSet (4389/45/1)
         Expected output object: downsized_AT_tophat_cufflinks_cuffdiff_output (4389/58/1)
@@ -110,9 +110,6 @@ class ExpressionAPITest(unittest.TestCase):
         fpkm_ref = getExprMat_retVal.get('exprMatrix_FPKM_ref')
         tpm_ref = getExprMat_retVal.get('exprMatrix_TPM_ref')
 
-        print('$$$$$$$$$$$$$$$$  FPKM_REF:   ' + fpkm_ref)
-        print('$$$$$$$$$$$$$$$$  TPM_REF:   ' + tpm_ref)
-
         outputFPKM_Obj = self.dfu.get_objects(
             {'object_refs': [fpkm_ref]})['data'][0]
 
@@ -128,15 +125,6 @@ class ExpressionAPITest(unittest.TestCase):
         pprint(outputTPM_Obj)
         print("==========================================================")
 
-        '''
-        self.assertEqual(outputObj['info'][2].startswith('KBaseRNASeq.RNASeqDifferentialExpression'), True)
-        inputData = inputObj['data']
-        outputData = outputObj['data']
-        self.assertEqual(outputData['genome_id'], inputData['genome_id'])
-        self.assertEqual(outputData['expressionSet_id'], input_obj_ref)
-        self.assertEqual(outputData['alignmentSet_id'], inputData['alignmentSet_id'])
-        self.assertEqual(outputData['sampleset_id'], inputData['sampleset_id'])
-        '''
     '''
     def fail_getExprMat(self, params, error, exception=ValueError, do_startswith=False):
 
