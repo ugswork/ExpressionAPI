@@ -29,4 +29,23 @@ module ExpressionAPI {
     funcdef  get_expressionMatrix(getExprMatrixParams params)
                                    returns (getExprMatrixOutput)
                                    authentication required;
+
+    typedef structure {
+        string  exprMatrix_ref;
+        string  gene_id;
+        int     start;
+        int     limit;
+    } SearchExprMatrixByGeneIDParams;
+
+    /*
+        num_found - number of all items found in query search
+    */
+    typedef structure {
+        int         start;
+        list<float> values;
+        int         num_found;
+    } SearchExprMatrixByGeneIDResult;
+
+    funcdef search_expressionMatrix_by_geneID(SearchExprMatrixByGeneIDParams params)
+        returns (SearchExprMatrixByGeneIDResult result) authentication optional;
 };

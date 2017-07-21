@@ -48,6 +48,21 @@ class ExpressionAPI(object):
             'ExpressionAPI.get_expressionMatrix',
             [params], self._service_ver, context)
 
+    def search_expressionMatrix_by_geneID(self, params, context=None):
+        """
+        :param params: instance of type "SearchExprMatrixByGeneIDParams" ->
+           structure: parameter "exprMatrix_ref" of String, parameter
+           "gene_id" of String, parameter "start" of Long, parameter "limit"
+           of Long
+        :returns: instance of type "SearchExprMatrixByGeneIDResult"
+           (num_found - number of all items found in query search) ->
+           structure: parameter "start" of Long, parameter "values" of list
+           of Double, parameter "num_found" of Long
+        """
+        return self._client.call_method(
+            'ExpressionAPI.search_expressionMatrix_by_geneID',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('ExpressionAPI.status',
                                         [], self._service_ver, context)

@@ -1,5 +1,6 @@
 import os
 import uuid
+import re
 from pprint import pprint, pformat
 
 from Workspace.WorkspaceClient import Workspace
@@ -46,25 +47,34 @@ class ExprMatrixUtils:
 
     def get_expressionset_data(self, expressionset_ref):
 
-        expr_set = self.ws_client.get_objects2(
+        expr_set_obj = self.ws_client.get_objects2(
             {'objects': [{'ref': expressionset_ref}]})['data'][0]
 
+        expr_set_obj_type = expr_set_obj.get('info')[2]
         expr_set_data = dict()
-        if expr_set.get('info')[2].startswith('KBaseRNASeq.RNASeqExpressionSet'):
-            pprint(expr_set)
+        expr_set_data['ws_name'] = expr_set_obj.get('info')[7]
+        expr_set_data['obj_name'] = expr_set_obj.get('info')[1]
 
-            expr_set_data['ws_name'] = expr_set['info'][7]
-            expr_set_data['obj_name'] = expr_set['info'][1]
-            expr_set_data['genome_ref'] = expr_set['data']['genome_id']
-            expr_obj_names = list()
-            for expr_obj in expr_set['data']['mapped_expression_objects']:  # better with ids
-                expr_obj_names.append(expr_obj.values()[0])
-            expr_set_data['expr_obj_names'] = expr_obj_names
-        elif expr_set.get('info')[2].startswith('KBaseSets.ExpressionSet'):
-            pass
+        if re.match('KBaseRNASeq.RNASeqExpressionSet-\d.\d', expr_set_obj_type):
+            expr_set_data['genome_ref'] = expr_set_obj['data']['genome_id']
+            expr_obj_refs = list()
+            for expr_obj in expr_set_obj['data']['mapped_expression_ids']:
+                expr_obj_refs.append(expr_obj.values()[0])
+            expr_set_data['expr_obj_refs'] = expr_obj_refs
+
+        elif re.match('KBaseSets.ExpressionSet-\d.\d', expr_set_obj_type):
+            items = expr_set_obj.get('data').get('items')
+            expr_obj_refs = list()
+            for item in items:
+                expr_obj_refs.append(item['ref'])
+            expr_obj = self.ws_client.get_objects2(
+                {'objects': [{'ref': expr_obj_refs[0]}]})['data'][0]
+            expr_set_data['genome_ref'] = expr_obj['data']['genome_id']
+            expr_set_data['expr_obj_refs'] = expr_obj_refs
         else:
-            raise TypeError('"{}" should be of type KBaseRNASeq.RNASeqExpressionSet ' +
-                            'or KBaseSets.ExpressionSet'.format(self.PARAM_IN_EXPSET_REF))
+            raise TypeError(self.PARAM_IN_EXPSET_REF + ' should be of type ' +
+                            'KBaseRNASeq.RNASeqExpressionSet ' +
+                            'or KBaseSets.ExpressionSet')
         return expr_set_data
 
     def save_expression_matrix(self, tables, expr_set_data, em_obj_name, hidden = 0):
@@ -135,48 +145,53 @@ class ExprMatrixUtils:
         expressionset_ref = params.get(self.PARAM_IN_EXPSET_REF)
 
         expr_set_data = self.get_expressionset_data(expressionset_ref)
-        fpkm_tables = []
-        tpm_tables = []
+        expr_obj_names = list()
+        fpkm_tables = list()
+        tpm_tables = list()
         tpm_table = None
-        for expr_obj_name in expr_set_data['expr_obj_names']:
+        for expr_obj_ref in expr_set_data['expr_obj_refs']:
             try:
                 self.logger.info('*** getting expression set {0} from workspace ****'
-                                 .format(expr_obj_name))
+                                 .format(expr_obj_ref))
 
-                expr = self.ws_client.get_objects([{'name': expr_obj_name,
-                                                    'workspace': expr_set_data['ws_name']}])[0]
+                expr = self.ws_client.get_objects2(
+                                            {'objects':
+                                            [{'ref': expr_obj_ref}]})['data'][0]
+
             except Exception, e:
                 self.logger.exception(e)
                 raise Exception('Unable to download expression object {0} from workspace {1}'.
-                                format(expr_obj_name, expr_set_data['ws_name']))
+                                format(expr_obj_ref, expr_set_data['ws_name']))
 
-            num_interp = expr['data']['numerical_interpretation']
+            expr_obj_names.append(expr.get('info')[1])
+            num_interp = expr.get('data').get('numerical_interpretation')
             if num_interp != 'FPKM':
                 raise Exception(
                     'Did not get expected FPKM value from numerical interpretation key from \
-                     Expression object {0}, instead got '.format(expr_obj_name, num_interp))
+                     Expression object {0}, instead got '.format(expr_obj_ref, num_interp))
 
-            pr_comments = expr['data']['processing_comments']  # log2 Normalized
-            self.logger.info('pr_comments are {0}'.format(pr_comments))
+            pr_comments = expr.get('data').get('processing_comments', None)  # log2 Normalized
+            if pr_comments is not None:
+                self.logger.info('pr_comments are {0}'.format(pr_comments))
 
-            fpkm_table = expr['data']['expression_levels']  # QUESTION: is this really FPKM levels?
+            fpkm_table = expr.get('data').get('expression_levels') # QUESTION: is this really FPKM levels?
             self.logger.info('FPKM keycount: {0}'.format(len(fpkm_table.keys())))
             fpkm_tables.append(fpkm_table)
 
             tpm_table = None  # Cufflinks doesn't generate TPM
             if 'tpm_expression_levels' in expr['data']:  # so we need to check for this key
-                tpm_table = expr['data']['tpm_expression_levels']
+                tpm_table = expr.get('data').get('tpm_expression_levels')
                 self.logger.info('TPM keycount: {0}'.format(len(tpm_table.keys())))
                 tpm_tables.append(tpm_table)
 
+        expr_set_data['expr_obj_names'] = expr_obj_names
         output_obj_name = params.get(self.PARAM_IN_OBJ_NAME)
         fpkm_ref = self.save_expression_matrix(fpkm_tables,
-                                            expr_set_data,
-                                            '{0}_FPKM_ExpressionMatrix'.format(output_obj_name))
+                                               expr_set_data,
+                                               '{0}_FPKM_ExpressionMatrix'.format(output_obj_name))
         tpm_ref = None
         if tpm_table is not None:
             tpm_ref = self.save_expression_matrix(tpm_tables,
-                                               expr_set_data,
-                                               '{0}_TPM_ExpressionMatrix'.format(output_obj_name))
+                                                  expr_set_data,
+                                                  '{0}_TPM_ExpressionMatrix'.format(output_obj_name))
         return fpkm_ref, tpm_ref
-

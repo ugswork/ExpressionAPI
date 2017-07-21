@@ -5,6 +5,7 @@ import os
 import sys
 import time
 from core.exprMatrix_utils import ExprMatrixUtils
+from core.ExprMatrixIndexer import ExprMatrixIndexer
 #END_HEADER
 
 
@@ -24,8 +25,8 @@ class ExpressionAPI:
     # the latter method is running.
     ######################################### noqa
     VERSION = "0.0.1"
-    GIT_URL = ""
-    GIT_COMMIT_HASH = "bb25f9a30e3d2e6b0651282c6a304d0b11b9c743"
+    GIT_URL = "https://github.com/kbaseapps/ExpressionAPI.git"
+    GIT_COMMIT_HASH = "7989cdea44e2da11700ec259b9211729a9855037"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -48,6 +49,7 @@ class ExpressionAPI:
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.ws_url = config['workspace-url']
         self.expr_matrix_utils = ExprMatrixUtils(config, self.__LOGGER)
+        self.indexer = ExprMatrixIndexer(config, self.__LOGGER)
         #END_CONSTRUCTOR
         pass
 
@@ -80,6 +82,33 @@ class ExpressionAPI:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
+
+    def search_expressionMatrix_by_geneID(self, ctx, params):
+        """
+        :param params: instance of type "SearchExprMatrixByGeneIDParams" ->
+           structure: parameter "exprMatrix_ref" of String, parameter
+           "gene_id" of String, parameter "start" of Long, parameter "limit"
+           of Long
+        :returns: instance of type "SearchExprMatrixByGeneIDResult"
+           (num_found - number of all items found in query search) ->
+           structure: parameter "start" of Long, parameter "values" of list
+           of Double, parameter "num_found" of Long
+        """
+        # ctx is the context object
+        # return variables are: result
+        #BEGIN search_expressionMatrix_by_geneID
+
+        result = self.indexer.search_exprMatrix_by_geneID(ctx['token'],
+                                                          params.get('exprMatrix_ref'),
+                                                          query)
+        #END search_expressionMatrix_by_geneID
+
+        # At some point might do deeper type checking...
+        if not isinstance(result, dict):
+            raise ValueError('Method search_expressionMatrix_by_geneID return value ' +
+                             'result is not type dict as required.')
+        # return the results
+        return [result]
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
