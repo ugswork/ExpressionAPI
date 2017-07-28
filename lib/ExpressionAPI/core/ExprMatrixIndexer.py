@@ -33,7 +33,7 @@ class ExprMatrixIndexer:
                                        sort_by, start, limit, num_found, self.debug)
         return ret
 
-    def search_exprMatrix_by_expresion(self, token, ref, query, sort_by, start, limit, num_found):
+    def search_exprMatrix_by_expression(self, token, ref, query, sort_by, start, limit, num_found):
 
         search_object = 'data'
         info_included = ['col_ids']

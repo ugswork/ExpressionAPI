@@ -341,6 +341,10 @@ class Application(object):
                              name='ExpressionAPI.search_expressionMatrix_by_geneID',
                              types=[dict])
         self.method_authentication['ExpressionAPI.search_expressionMatrix_by_geneID'] = 'optional'  # noqa
+        self.rpc_service.add(impl_ExpressionAPI.get_differentialExpressionMatrix,
+                             name='ExpressionAPI.get_differentialExpressionMatrix',
+                             types=[dict])
+        self.method_authentication['ExpressionAPI.get_differentialExpressionMatrix'] = 'required'  # noqa
         self.rpc_service.add(impl_ExpressionAPI.status,
                              name='ExpressionAPI.status',
                              types=[dict])

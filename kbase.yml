@@ -2,7 +2,7 @@ module-name:
     ExpressionAPI
 
 module-description:
-    A KBase module
+    A dynamic service module for KBase Expression and Differential Expression objects
 
 service-language:
     python
@@ -13,3 +13,5 @@ module-version:
 owners:
     [umaganapathyswork]
 
+service-config:
+    dynamic-service: true

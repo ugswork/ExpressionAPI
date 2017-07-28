@@ -5,6 +5,7 @@ import os
 import sys
 import time
 from core.exprMatrix_utils import ExprMatrixUtils
+from core.diffExprMatrix_utils import DiffExprMatrixUtils
 from core.ExprMatrixIndexer import ExprMatrixIndexer
 #END_HEADER
 
@@ -26,7 +27,7 @@ class ExpressionAPI:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/kbaseapps/ExpressionAPI.git"
-    GIT_COMMIT_HASH = "7989cdea44e2da11700ec259b9211729a9855037"
+    GIT_COMMIT_HASH = "a9696a08c1f0ecd02aadaa9fbf900d79f9a7c629"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -49,6 +50,7 @@ class ExpressionAPI:
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.ws_url = config['workspace-url']
         self.expr_matrix_utils = ExprMatrixUtils(config, self.__LOGGER)
+        self.diffexpr_matrix_utils = DiffExprMatrixUtils(config, self.__LOGGER)
         self.indexer = ExprMatrixIndexer(config, self.__LOGGER)
         #END_CONSTRUCTOR
         pass
@@ -109,6 +111,33 @@ class ExpressionAPI:
                              'result is not type dict as required.')
         # return the results
         return [result]
+
+    def get_differentialExpressionMatrix(self, ctx, params):
+        """
+        :param params: instance of type "getDiffExprMatrixParams" (*
+           Following are the required input parameters to get Differential
+           Expression Matrix json object *) -> structure: parameter
+           "workspace_name" of String, parameter "diffExprMatrixSet_ref" of
+           String
+        :returns: instance of type "getDiffExprMatrixOutput" -> structure:
+           parameter "json_filepath" of String
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_differentialExpressionMatrix
+
+        dems_json = self.diffexpr_matrix_utils.get_diffexpr_matrix(params)
+
+        returnVal = {'json_filepath': dems_json}
+
+        #END get_differentialExpressionMatrix
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method get_differentialExpressionMatrix return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",

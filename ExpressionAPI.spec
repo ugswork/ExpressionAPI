@@ -48,4 +48,25 @@ module ExpressionAPI {
 
     funcdef search_expressionMatrix_by_geneID(SearchExprMatrixByGeneIDParams params)
         returns (SearchExprMatrixByGeneIDResult result) authentication optional;
+
+    /**
+        Following are the required input parameters to get Differential Expression Matrix json object
+    **/
+
+    typedef structure {
+
+        string      workspace_name;
+        string      diffExprMatrixSet_ref;
+
+    } getDiffExprMatrixParams;
+
+    typedef structure {
+
+        string   json_filepath;
+
+    } getDiffExprMatrixOutput;
+
+    funcdef  get_differentialExpressionMatrix(getDiffExprMatrixParams params)
+                                      returns (getDiffExprMatrixOutput)
+                                      authentication required;
 };

@@ -63,6 +63,20 @@ class ExpressionAPI(object):
             'ExpressionAPI.search_expressionMatrix_by_geneID',
             [params], self._service_ver, context)
 
+    def get_differentialExpressionMatrix(self, params, context=None):
+        """
+        :param params: instance of type "getDiffExprMatrixParams" (*
+           Following are the required input parameters to get Differential
+           Expression Matrix json object *) -> structure: parameter
+           "workspace_name" of String, parameter "diffExprMatrixSet_ref" of
+           String
+        :returns: instance of type "getDiffExprMatrixOutput" -> structure:
+           parameter "json_filepath" of String
+        """
+        return self._client.call_method(
+            'ExpressionAPI.get_differentialExpressionMatrix',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('ExpressionAPI.status',
                                         [], self._service_ver, context)
