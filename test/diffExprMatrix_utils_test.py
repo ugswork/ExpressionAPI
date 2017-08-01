@@ -12,7 +12,7 @@ try:
 except BaseException:
     from configparser import ConfigParser  # py3
 
-from pprint import pprint  # noqa: F401
+import pprint
 
 from biokbase.workspace.client import Workspace as workspaceService
 from DataFileUtil.DataFileUtilClient import DataFileUtil
@@ -107,14 +107,23 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
         inputObj = self.dfu.get_objects(
                                     {'object_refs': [input_diffexprmatrixset_ref]})['data'][0]
 
+        pp = pprint.PrettyPrinter(depth=6)
+
         print("============ INPUT EXPRESSION SET OBJECT ==============")
-        pprint(inputObj)
+        pp.pprint(inputObj)
         print("==========================================================")
 
         dem_json = getDiffExprMat_retVal.get('json_filepath')
+        plot_data = getDiffExprMat_retVal.get('volcano_plot_data')
+
+        '''
+        print("============ VOLCANO PLOT DATA  ==============")
+        pp.pprint(plot_data)
+        print("==========================================================")
+        '''
 
         print("============ OUTPUT JSON OBJECT ==============")
-        pprint(dem_json)
+        pp.pprint(dem_json)
         print("==========================================================")
 
     # Following test uses object refs from a narrative. Comment the next line to run the test

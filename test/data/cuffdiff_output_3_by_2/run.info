@@ -1,0 +1,5 @@
+param	value
+cmd_line	/opt/cufflinks/cuffdiff -p 10 -c 10 --library-norm-method classic-fpkm -o /kb/module/work/tmp/cuffdiff_merge_a1eee817-7f90-4687-8180-0819bbd6d007/cuffdiff_8c02cf0b-f65a-4af1-8477-9df419af13ae -L low,high,ks78 -u /kb/module/work/tmp/cuffdiff_merge_a1eee817-7f90-4687-8180-0819bbd6d007/cuffmerge_92a9e24c-7416-4037-a037-151e5ca5f7f6/merged.gtf /kb/module/work/tmp/low_download_1501259669452/accepted_hits.bam,/kb/module/work/tmp/low_download_1501259445440/accepted_hits.bam /kb/module/work/tmp/high_download_1501259985834/accepted_hits.bam,/kb/module/work/tmp/high_download_1501259827631/accepted_hits.bam /kb/module/work/tmp/ks78_download_1501260533445/accepted_hits.bam,/kb/module/work/tmp/ks78_download_1501260309154/accepted_hits.bam 
+version	2.2.1
+SVN_revision	4237
+boost_version	104700

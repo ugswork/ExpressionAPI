@@ -203,7 +203,7 @@ class DiffExprMatrixUtils:
         with open(json_outfile, 'w+') as outfile:
             json.dump(diffexprmatset_list, outfile, sort_keys=True, indent=4)
 
-        return json_outfile
+        return diffexprmatset_list, json_outfile
 
 
 

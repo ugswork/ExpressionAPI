@@ -11,6 +11,7 @@ module ExpressionAPI {
         Following are the required input parameters to get Expression Matrix
     **/
 
+    /*
     typedef structure {
 
         string      workspace_name;
@@ -37,9 +38,6 @@ module ExpressionAPI {
         int     limit;
     } SearchExprMatrixByGeneIDParams;
 
-    /*
-        num_found - number of all items found in query search
-    */
     typedef structure {
         int         start;
         list<float> values;
@@ -48,6 +46,8 @@ module ExpressionAPI {
 
     funcdef search_expressionMatrix_by_geneID(SearchExprMatrixByGeneIDParams params)
         returns (SearchExprMatrixByGeneIDResult result) authentication optional;
+
+    */
 
     /**
         Following are the required input parameters to get Differential Expression Matrix json object
@@ -62,11 +62,12 @@ module ExpressionAPI {
 
     typedef structure {
 
-        string   json_filepath;
+        UnspecifiedObject   volcano_plot_data;
+        string              json_filepath;
 
     } getDiffExprMatrixOutput;
 
     funcdef  get_differentialExpressionMatrix(getDiffExprMatrixParams params)
-                                      returns (getDiffExprMatrixOutput)
-                                      authentication required;
+                                     returns (getDiffExprMatrixOutput)
+                                     authentication required;
 };

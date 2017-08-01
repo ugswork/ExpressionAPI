@@ -1,0 +1,7 @@
+file	condition	replicate_num	total_mass	norm_mass	internal_scale	external_scale
+/kb/module/work/tmp/low_download_1501259669452/accepted_hits.bam	low	0	5.23303e+06	4.81473e+06	1.08667	1
+/kb/module/work/tmp/low_download_1501259445440/accepted_hits.bam	low	1	5.60147e+06	4.81473e+06	1.16319	1
+/kb/module/work/tmp/high_download_1501259985834/accepted_hits.bam	high	0	2.76102e+06	4.81473e+06	0.573274	1
+/kb/module/work/tmp/high_download_1501259827631/accepted_hits.bam	high	1	5.0737e+06	4.81473e+06	1.05357	1
+/kb/module/work/tmp/ks78_download_1501260533445/accepted_hits.bam	ks78	0	5.05694e+06	4.81473e+06	1.05012	1
+/kb/module/work/tmp/ks78_download_1501260309154/accepted_hits.bam	ks78	1	5.16795e+06	4.81473e+06	1.07317	1

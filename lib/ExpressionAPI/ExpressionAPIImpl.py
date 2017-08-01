@@ -6,7 +6,7 @@ import sys
 import time
 from core.exprMatrix_utils import ExprMatrixUtils
 from core.diffExprMatrix_utils import DiffExprMatrixUtils
-from core.ExprMatrixIndexer import ExprMatrixIndexer
+from core.DiffExprMatrixIndexer import DiffExprMatrixIndexer
 #END_HEADER
 
 
@@ -51,7 +51,7 @@ class ExpressionAPI:
         self.ws_url = config['workspace-url']
         self.expr_matrix_utils = ExprMatrixUtils(config, self.__LOGGER)
         self.diffexpr_matrix_utils = DiffExprMatrixUtils(config, self.__LOGGER)
-        self.indexer = ExprMatrixIndexer(config, self.__LOGGER)
+        self.indexer = DiffExprMatrixIndexer(config, self.__LOGGER)
         #END_CONSTRUCTOR
         pass
 
@@ -126,9 +126,10 @@ class ExpressionAPI:
         # return variables are: returnVal
         #BEGIN get_differentialExpressionMatrix
 
-        dems_json = self.diffexpr_matrix_utils.get_diffexpr_matrix(params)
+        plot_data, dems_json = self.diffexpr_matrix_utils.get_diffexpr_matrix(params)
 
-        returnVal = {'json_filepath': dems_json}
+        returnVal = {'volcano_plot_data': plot_data,
+                     'json_filepath': dems_json}
 
         #END get_differentialExpressionMatrix
 
