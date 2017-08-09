@@ -33,45 +33,15 @@ class ExpressionAPI(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
-    def get_expressionMatrix(self, params, context=None):
-        """
-        :param params: instance of type "getExprMatrixParams" (* Following
-           are the required input parameters to get Expression Matrix *) ->
-           structure: parameter "workspace_name" of String, parameter
-           "output_obj_name" of String, parameter "expressionset_ref" of
-           String
-        :returns: instance of type "getExprMatrixOutput" -> structure:
-           parameter "exprMatrix_FPKM_ref" of String, parameter
-           "exprMatrix_TPM_ref" of String
-        """
-        return self._client.call_method(
-            'ExpressionAPI.get_expressionMatrix',
-            [params], self._service_ver, context)
-
-    def search_expressionMatrix_by_geneID(self, params, context=None):
-        """
-        :param params: instance of type "SearchExprMatrixByGeneIDParams" ->
-           structure: parameter "exprMatrix_ref" of String, parameter
-           "gene_id" of String, parameter "start" of Long, parameter "limit"
-           of Long
-        :returns: instance of type "SearchExprMatrixByGeneIDResult"
-           (num_found - number of all items found in query search) ->
-           structure: parameter "start" of Long, parameter "values" of list
-           of Double, parameter "num_found" of Long
-        """
-        return self._client.call_method(
-            'ExpressionAPI.search_expressionMatrix_by_geneID',
-            [params], self._service_ver, context)
-
     def get_differentialExpressionMatrix(self, params, context=None):
         """
         :param params: instance of type "getDiffExprMatrixParams" (*
            Following are the required input parameters to get Differential
            Expression Matrix json object *) -> structure: parameter
-           "workspace_name" of String, parameter "diffExprMatrixSet_ref" of
-           String
+           "diffExprMatrixSet_ref" of String
         :returns: instance of type "getDiffExprMatrixOutput" -> structure:
-           parameter "json_filepath" of String
+           parameter "volcano_plot_data" of unspecified object, parameter
+           "json_filepath" of String
         """
         return self._client.call_method(
             'ExpressionAPI.get_differentialExpressionMatrix',

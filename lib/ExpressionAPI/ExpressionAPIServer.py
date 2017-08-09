@@ -333,14 +333,6 @@ class Application(object):
         self.serverlog.set_log_level(6)
         self.rpc_service = JSONRPCServiceCustom()
         self.method_authentication = dict()
-        self.rpc_service.add(impl_ExpressionAPI.get_expressionMatrix,
-                             name='ExpressionAPI.get_expressionMatrix',
-                             types=[dict])
-        self.method_authentication['ExpressionAPI.get_expressionMatrix'] = 'required'  # noqa
-        self.rpc_service.add(impl_ExpressionAPI.search_expressionMatrix_by_geneID,
-                             name='ExpressionAPI.search_expressionMatrix_by_geneID',
-                             types=[dict])
-        self.method_authentication['ExpressionAPI.search_expressionMatrix_by_geneID'] = 'optional'  # noqa
         self.rpc_service.add(impl_ExpressionAPI.get_differentialExpressionMatrix,
                              name='ExpressionAPI.get_differentialExpressionMatrix',
                              types=[dict])

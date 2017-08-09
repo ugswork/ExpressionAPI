@@ -18,7 +18,6 @@ class DiffExprMatrixUtils:
     def __init__(self, config, logger=None):
         self.config = config
         self.logger = logger
-        self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.scratch = os.path.join(config['scratch'], 'DEM_' + str(uuid.uuid4()))
         self.ws_url = config['workspace-url']
         self.ws_client = Workspace(self.ws_url)

@@ -23,31 +23,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "workspace_name",
     "diffExprMatrixSet_ref"
 })
 public class GetDiffExprMatrixParams {
 
-    @JsonProperty("workspace_name")
-    private String workspaceName;
     @JsonProperty("diffExprMatrixSet_ref")
     private String diffExprMatrixSetRef;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("workspace_name")
-    public String getWorkspaceName() {
-        return workspaceName;
-    }
-
-    @JsonProperty("workspace_name")
-    public void setWorkspaceName(String workspaceName) {
-        this.workspaceName = workspaceName;
-    }
-
-    public GetDiffExprMatrixParams withWorkspaceName(String workspaceName) {
-        this.workspaceName = workspaceName;
-        return this;
-    }
 
     @JsonProperty("diffExprMatrixSet_ref")
     public String getDiffExprMatrixSetRef() {
@@ -76,7 +58,7 @@ public class GetDiffExprMatrixParams {
 
     @Override
     public String toString() {
-        return ((((((("GetDiffExprMatrixParams"+" [workspaceName=")+ workspaceName)+", diffExprMatrixSetRef=")+ diffExprMatrixSetRef)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((("GetDiffExprMatrixParams"+" [diffExprMatrixSetRef=")+ diffExprMatrixSetRef)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

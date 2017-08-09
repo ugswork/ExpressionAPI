@@ -163,40 +163,6 @@ public class ExpressionAPIClient {
     }
 
     /**
-     * <p>Original spec-file function name: get_expressionMatrix</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link us.kbase.expressionapi.GetExprMatrixParams GetExprMatrixParams} (original type "getExprMatrixParams")
-     * @return   instance of type {@link us.kbase.expressionapi.GetExprMatrixOutput GetExprMatrixOutput} (original type "getExprMatrixOutput")
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public GetExprMatrixOutput getExpressionMatrix(GetExprMatrixParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(params);
-        TypeReference<List<GetExprMatrixOutput>> retType = new TypeReference<List<GetExprMatrixOutput>>() {};
-        List<GetExprMatrixOutput> res = caller.jsonrpcCall("ExpressionAPI.get_expressionMatrix", args, retType, true, true, jsonRpcContext, this.serviceVersion);
-        return res.get(0);
-    }
-
-    /**
-     * <p>Original spec-file function name: search_expressionMatrix_by_geneID</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link us.kbase.expressionapi.SearchExprMatrixByGeneIDParams SearchExprMatrixByGeneIDParams}
-     * @return   parameter "result" of type {@link us.kbase.expressionapi.SearchExprMatrixByGeneIDResult SearchExprMatrixByGeneIDResult}
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public SearchExprMatrixByGeneIDResult searchExpressionMatrixByGeneID(SearchExprMatrixByGeneIDParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(params);
-        TypeReference<List<SearchExprMatrixByGeneIDResult>> retType = new TypeReference<List<SearchExprMatrixByGeneIDResult>>() {};
-        List<SearchExprMatrixByGeneIDResult> res = caller.jsonrpcCall("ExpressionAPI.search_expressionMatrix_by_geneID", args, retType, true, false, jsonRpcContext, this.serviceVersion);
-        return res.get(0);
-    }
-
-    /**
      * <p>Original spec-file function name: get_differentialExpressionMatrix</p>
      * <pre>
      * </pre>

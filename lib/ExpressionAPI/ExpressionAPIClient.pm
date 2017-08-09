@@ -108,202 +108,6 @@ sub new
 
 
 
-=head2 get_expressionMatrix
-
-  $return = $obj->get_expressionMatrix($params)
-
-=over 4
-
-=item Parameter and return types
-
-=begin html
-
-<pre>
-$params is an ExpressionAPI.getExprMatrixParams
-$return is an ExpressionAPI.getExprMatrixOutput
-getExprMatrixParams is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a string
-	output_obj_name has a value which is a string
-	expressionset_ref has a value which is a string
-getExprMatrixOutput is a reference to a hash where the following keys are defined:
-	exprMatrix_FPKM_ref has a value which is a string
-	exprMatrix_TPM_ref has a value which is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-$params is an ExpressionAPI.getExprMatrixParams
-$return is an ExpressionAPI.getExprMatrixOutput
-getExprMatrixParams is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a string
-	output_obj_name has a value which is a string
-	expressionset_ref has a value which is a string
-getExprMatrixOutput is a reference to a hash where the following keys are defined:
-	exprMatrix_FPKM_ref has a value which is a string
-	exprMatrix_TPM_ref has a value which is a string
-
-
-=end text
-
-=item Description
-
-
-
-=back
-
-=cut
-
- sub get_expressionMatrix
-{
-    my($self, @args) = @_;
-
-# Authentication: required
-
-    if ((my $n = @args) != 1)
-    {
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function get_expressionMatrix (received $n, expecting 1)");
-    }
-    {
-	my($params) = @args;
-
-	my @_bad_arguments;
-        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
-        if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to get_expressionMatrix:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'get_expressionMatrix');
-	}
-    }
-
-    my $url = $self->{url};
-    my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "ExpressionAPI.get_expressionMatrix",
-	    params => \@args,
-    });
-    if ($result) {
-	if ($result->is_error) {
-	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-					       code => $result->content->{error}->{code},
-					       method_name => 'get_expressionMatrix',
-					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-					      );
-	} else {
-	    return wantarray ? @{$result->result} : $result->result->[0];
-	}
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method get_expressionMatrix",
-					    status_line => $self->{client}->status_line,
-					    method_name => 'get_expressionMatrix',
-				       );
-    }
-}
- 
-
-
-=head2 search_expressionMatrix_by_geneID
-
-  $result = $obj->search_expressionMatrix_by_geneID($params)
-
-=over 4
-
-=item Parameter and return types
-
-=begin html
-
-<pre>
-$params is an ExpressionAPI.SearchExprMatrixByGeneIDParams
-$result is an ExpressionAPI.SearchExprMatrixByGeneIDResult
-SearchExprMatrixByGeneIDParams is a reference to a hash where the following keys are defined:
-	exprMatrix_ref has a value which is a string
-	gene_id has a value which is a string
-	start has a value which is an int
-	limit has a value which is an int
-SearchExprMatrixByGeneIDResult is a reference to a hash where the following keys are defined:
-	start has a value which is an int
-	values has a value which is a reference to a list where each element is a float
-	num_found has a value which is an int
-
-</pre>
-
-=end html
-
-=begin text
-
-$params is an ExpressionAPI.SearchExprMatrixByGeneIDParams
-$result is an ExpressionAPI.SearchExprMatrixByGeneIDResult
-SearchExprMatrixByGeneIDParams is a reference to a hash where the following keys are defined:
-	exprMatrix_ref has a value which is a string
-	gene_id has a value which is a string
-	start has a value which is an int
-	limit has a value which is an int
-SearchExprMatrixByGeneIDResult is a reference to a hash where the following keys are defined:
-	start has a value which is an int
-	values has a value which is a reference to a list where each element is a float
-	num_found has a value which is an int
-
-
-=end text
-
-=item Description
-
-
-
-=back
-
-=cut
-
- sub search_expressionMatrix_by_geneID
-{
-    my($self, @args) = @_;
-
-# Authentication: optional
-
-    if ((my $n = @args) != 1)
-    {
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function search_expressionMatrix_by_geneID (received $n, expecting 1)");
-    }
-    {
-	my($params) = @args;
-
-	my @_bad_arguments;
-        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
-        if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to search_expressionMatrix_by_geneID:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'search_expressionMatrix_by_geneID');
-	}
-    }
-
-    my $url = $self->{url};
-    my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "ExpressionAPI.search_expressionMatrix_by_geneID",
-	    params => \@args,
-    });
-    if ($result) {
-	if ($result->is_error) {
-	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-					       code => $result->content->{error}->{code},
-					       method_name => 'search_expressionMatrix_by_geneID',
-					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-					      );
-	} else {
-	    return wantarray ? @{$result->result} : $result->result->[0];
-	}
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method search_expressionMatrix_by_geneID",
-					    status_line => $self->{client}->status_line,
-					    method_name => 'search_expressionMatrix_by_geneID',
-				       );
-    }
-}
- 
-
-
 =head2 get_differentialExpressionMatrix
 
   $return = $obj->get_differentialExpressionMatrix($params)
@@ -318,9 +122,9 @@ SearchExprMatrixByGeneIDResult is a reference to a hash where the following keys
 $params is an ExpressionAPI.getDiffExprMatrixParams
 $return is an ExpressionAPI.getDiffExprMatrixOutput
 getDiffExprMatrixParams is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a string
 	diffExprMatrixSet_ref has a value which is a string
 getDiffExprMatrixOutput is a reference to a hash where the following keys are defined:
+	volcano_plot_data has a value which is an UnspecifiedObject, which can hold any non-null object
 	json_filepath has a value which is a string
 
 </pre>
@@ -332,9 +136,9 @@ getDiffExprMatrixOutput is a reference to a hash where the following keys are de
 $params is an ExpressionAPI.getDiffExprMatrixParams
 $return is an ExpressionAPI.getDiffExprMatrixOutput
 getDiffExprMatrixParams is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a string
 	diffExprMatrixSet_ref has a value which is a string
 getDiffExprMatrixOutput is a reference to a hash where the following keys are defined:
+	volcano_plot_data has a value which is an UnspecifiedObject, which can hold any non-null object
 	json_filepath has a value which is a string
 
 
@@ -483,154 +287,6 @@ sub _validate_version {
 
 
 
-=head2 getExprMatrixParams
-
-=over 4
-
-
-
-=item Description
-
-*
-Following are the required input parameters to get Expression Matrix
-    *
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-workspace_name has a value which is a string
-output_obj_name has a value which is a string
-expressionset_ref has a value which is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-workspace_name has a value which is a string
-output_obj_name has a value which is a string
-expressionset_ref has a value which is a string
-
-
-=end text
-
-=back
-
-
-
-=head2 getExprMatrixOutput
-
-=over 4
-
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-exprMatrix_FPKM_ref has a value which is a string
-exprMatrix_TPM_ref has a value which is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-exprMatrix_FPKM_ref has a value which is a string
-exprMatrix_TPM_ref has a value which is a string
-
-
-=end text
-
-=back
-
-
-
-=head2 SearchExprMatrixByGeneIDParams
-
-=over 4
-
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-exprMatrix_ref has a value which is a string
-gene_id has a value which is a string
-start has a value which is an int
-limit has a value which is an int
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-exprMatrix_ref has a value which is a string
-gene_id has a value which is a string
-start has a value which is an int
-limit has a value which is an int
-
-
-=end text
-
-=back
-
-
-
-=head2 SearchExprMatrixByGeneIDResult
-
-=over 4
-
-
-
-=item Description
-
-num_found - number of all items found in query search
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-start has a value which is an int
-values has a value which is a reference to a list where each element is a float
-num_found has a value which is an int
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-start has a value which is an int
-values has a value which is a reference to a list where each element is a float
-num_found has a value which is an int
-
-
-=end text
-
-=back
-
-
-
 =head2 getDiffExprMatrixParams
 
 =over 4
@@ -650,7 +306,6 @@ Following are the required input parameters to get Differential Expression Matri
 
 <pre>
 a reference to a hash where the following keys are defined:
-workspace_name has a value which is a string
 diffExprMatrixSet_ref has a value which is a string
 
 </pre>
@@ -660,7 +315,6 @@ diffExprMatrixSet_ref has a value which is a string
 =begin text
 
 a reference to a hash where the following keys are defined:
-workspace_name has a value which is a string
 diffExprMatrixSet_ref has a value which is a string
 
 
@@ -682,6 +336,7 @@ diffExprMatrixSet_ref has a value which is a string
 
 <pre>
 a reference to a hash where the following keys are defined:
+volcano_plot_data has a value which is an UnspecifiedObject, which can hold any non-null object
 json_filepath has a value which is a string
 
 </pre>
@@ -691,6 +346,7 @@ json_filepath has a value which is a string
 =begin text
 
 a reference to a hash where the following keys are defined:
+volcano_plot_data has a value which is an UnspecifiedObject, which can hold any non-null object
 json_filepath has a value which is a string
 
 

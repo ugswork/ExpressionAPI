@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import us.kbase.common.service.UObject;
 
 
 /**
@@ -19,13 +20,31 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
+    "volcano_plot_data",
     "json_filepath"
 })
 public class GetDiffExprMatrixOutput {
 
+    @JsonProperty("volcano_plot_data")
+    private UObject volcanoPlotData;
     @JsonProperty("json_filepath")
     private String jsonFilepath;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    @JsonProperty("volcano_plot_data")
+    public UObject getVolcanoPlotData() {
+        return volcanoPlotData;
+    }
+
+    @JsonProperty("volcano_plot_data")
+    public void setVolcanoPlotData(UObject volcanoPlotData) {
+        this.volcanoPlotData = volcanoPlotData;
+    }
+
+    public GetDiffExprMatrixOutput withVolcanoPlotData(UObject volcanoPlotData) {
+        this.volcanoPlotData = volcanoPlotData;
+        return this;
+    }
 
     @JsonProperty("json_filepath")
     public String getJsonFilepath() {
@@ -54,7 +73,7 @@ public class GetDiffExprMatrixOutput {
 
     @Override
     public String toString() {
-        return ((((("GetDiffExprMatrixOutput"+" [jsonFilepath=")+ jsonFilepath)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((("GetDiffExprMatrixOutput"+" [volcanoPlotData=")+ volcanoPlotData)+", jsonFilepath=")+ jsonFilepath)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
