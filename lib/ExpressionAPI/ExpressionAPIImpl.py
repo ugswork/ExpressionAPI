@@ -4,9 +4,7 @@ import logging
 import os
 import sys
 import time
-from core.exprMatrix_utils import ExprMatrixUtils
 from core.diffExprMatrix_utils import DiffExprMatrixUtils
-from core.DiffExprMatrixIndexer import DiffExprMatrixIndexer
 #END_HEADER
 
 
@@ -49,9 +47,7 @@ class ExpressionAPI:
         self.scratch = config['scratch']
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.ws_url = config['workspace-url']
-        self.expr_matrix_utils = ExprMatrixUtils(config, self.__LOGGER)
         self.diffexpr_matrix_utils = DiffExprMatrixUtils(config, self.__LOGGER)
-        self.indexer = DiffExprMatrixIndexer(config, self.__LOGGER)
         #END_CONSTRUCTOR
         pass
 

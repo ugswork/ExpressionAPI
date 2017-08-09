@@ -15,8 +15,6 @@ except BaseException:
 from pprint import pprint  # noqa: F401
 
 from biokbase.workspace.client import Workspace as workspaceService
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from ExpressionAPI.ExpressionAPIImpl import ExpressionAPI
 from ExpressionAPI.ExpressionAPIServer import MethodContext
 from ExpressionAPI.authclient import KBaseAuth as _KBaseAuth
@@ -51,13 +49,9 @@ class ExpressionAPITest(unittest.TestCase):
         cls.wsClient = workspaceService(cls.wsURL)
         cls.serviceImpl = ExpressionAPI(cls.cfg)
         cls.scratch = cls.cfg['scratch']
-        cls.callback_url = os.environ['SDK_CALLBACK_URL']
-        cls.dfu = DataFileUtil(cls.callback_url)
-        cls.gfu = GenomeFileUtil(cls.callback_url)
         suffix = int(time.time() * 1000)
         cls.wsName = "test_exprAPI_" + str(suffix)
         cls.wsClient.create_workspace({'workspace': cls.wsName})
-        cls.setupdata()
 
     @classmethod
     def tearDownClass(cls):
@@ -76,154 +70,3 @@ class ExpressionAPITest(unittest.TestCase):
 
     def getContext(self):
         return self.__class__.ctx
-
-    @classmethod
-    def setupdata(cls):
-        # upload genome object
-
-        genbank_file_name = 'minimal.gbff'
-        genbank_file_path = os.path.join(cls.scratch, genbank_file_name)
-        shutil.copy(os.path.join('data', genbank_file_name), genbank_file_path)
-
-        genome_object_name = 'test_Genome'
-        cls.genome_ref = cls.gfu.genbank_to_genome({'file': {'path': genbank_file_path},
-                                                    'workspace_name': cls.wsName,
-                                                    'genome_name': genome_object_name
-                                                    })['genome_ref']
-
-    # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-
-    def get_expr_matrix_success(self, input_exprset_ref, output_obj_name):
-
-        test_name = inspect.stack()[1][3]
-        print('\n*** starting expected get expr matrix success test: ' + test_name + ' *****************')
-
-        params = {'expressionset_ref': input_exprset_ref,
-                  'workspace_name': self.getWsName(),
-                  'output_obj_name': output_obj_name,
-                  }
-
-        getExprMat_retVal = self.getImpl().get_expressionMatrix(self.ctx, params)[0]
-
-        inputObj = self.dfu.get_objects(
-                                    {'object_refs': [input_exprset_ref]})['data'][0]
-
-        print("============ INPUT EXPRESSION SET OBJECT ==============")
-        pprint(inputObj)
-        print("==========================================================")
-
-        fpkm_ref = getExprMat_retVal.get('exprMatrix_FPKM_ref')
-        tpm_ref = getExprMat_retVal.get('exprMatrix_TPM_ref')
-
-        '''
-        outputFPKM_Obj = self.dfu.get_objects(
-            {'object_refs': [fpkm_ref]})['data'][0]
-
-        print("============  EXPRESSION MATRIX FPKM OUTPUT  ==============")
-        pprint(outputFPKM_Obj)
-        print("==========================================================")
-        
-        outputTPM_Obj = self.dfu.get_objects(
-            {'object_refs': [tpm_ref]})['data'][0]
-
-        print("============  EXPRESSION MATRIX TPM OUTPUT  ==============")
-        pprint(outputTPM_Obj)
-        print("==========================================================")
-        '''
-        print("============   FPKM REF  ==============  " + fpkm_ref)
-        print("============   TPM REF  ==============" + tpm_ref)
-
-        #ret = self.getImpl().search_expressionMatrix_by_geneID(self.ctx, {'exprMatrix_ref': fpkm_ref})
-
-
-    # Following test uses object refs from a narrative. Comment the next line to run the test
-    #@unittest.skip("skipped test_get_expr_matrix_rnaseq_exprset_success")
-    def test_get_expr_matrix_rnaseq_exprset_success(self):
-        """
-        Input object 1: downsized_AT_reads_hisat2_AlignmentSet_stringtie_ExpressionSet (4389/18/2)
-        Input object 2: downsized_AT_reads_tophat_AlignmentSet_cufflinks_ExpressionSet (4389/45/1)
-        """
-        appdev_rnaseq_exprset_obj_ref1 = '4389/18/2'
-        appdev_rnaseq_exprset_obj_name1 = 'downsized_AT_reads_hisat2_AlignmentSet_stringtie_ExpressionSet'
-
-        # this ref gives json error
-        appdev_rnaseq_exprset_obj_ref2 = '4389/45/1'
-        appdev_rnaseq_exprset_obj_name2 = 'downsized_AT_reads_tophat_AlignmentSet_cufflinks_ExpressionSet'
-
-        self.get_expr_matrix_success(appdev_rnaseq_exprset_obj_ref1, 'rnaseq_exprset_exprmat_output')
-
-    #@unittest.skip("skipped test_get_expr_matrix_setapi_exprset_success")
-    def test_get_expr_matrix_setapi_exprset_success(self):
-
-        narrarive_setapi_exprset_ref = '2409/348/1'
-
-        self.get_expr_matrix_success(narrarive_setapi_exprset_ref, 'setapi_exprset_exprmat_output')
-
-
-    def fail_getExprMat(self, params, error, exception=ValueError, do_startswith=False):
-
-        test_name = inspect.stack()[1][3]
-        print('\n*** starting expected get Expression Matrix fail test: ' + test_name + ' **********************')
-
-        with self.assertRaises(exception) as context:
-            self.getImpl().get_expressionMatrix(self.ctx, params)
-        if do_startswith:
-            self.assertTrue(str(context.exception.message).startswith(error),
-                            "Error message {} does not start with {}".format(
-                                str(context.exception.message),
-                                error))
-        else:
-            self.assertEqual(error, str(context.exception.message))
-
-    def test_getExprMat_fail_no_ws_name(self):
-        self.fail_getExprMat(
-            {
-                'expressionset_ref': '1/1/1',
-                'output_obj_name': 'test_exprMatrix'
-            },
-            '"workspace_name" parameter is required, but missing')
-
-    def test_getExprMat_fail_no_obj_name(self):
-        self.fail_getExprMat(
-            {
-                'workspace_name': self.getWsName(),
-                'expressionset_ref': '1/1/1'
-            },
-            '"output_obj_name" parameter is required, but missing')
-
-    def test_getExprMat_fail_no_exprset_ref(self):
-        self.fail_getExprMat(
-            {
-                'workspace_name': self.getWsName(),
-                'output_obj_name': 'test_exprMatrix'
-            },
-            '"expressionset_ref" parameter is required, but missing')
-
-    def test_getExprMat_fail_bad_wsname(self):
-        self.fail_getExprMat(
-            {
-                'workspace_name': '&bad',
-                'expressionset_ref': '1/1/1',
-                'output_obj_name': 'test_exprMatrix'
-            },
-            'Illegal character in workspace name &bad: &')
-
-    def test_getExprMat_fail_non_existant_wsname(self):
-        self.fail_getExprMat(
-            {
-                'workspace_name': '1s',
-                'expressionset_ref': '1/1/1',
-                'output_obj_name': 'test_exprMatrix'
-            },
-            'No workspace with name 1s exists')
-
-    def test_getExprMat_fail_non_expset_ref(self):
-        self.fail_getExprMat(
-            {
-                'workspace_name': self.getWsName(),
-                'expressionset_ref': self.genome_ref,
-                'output_obj_name': 'test_exprMatrix'
-            },
-            'expressionset_ref should be of type KBaseRNASeq.RNASeqExpressionSet ' +
-            'or KBaseSets.ExpressionSet', exception=TypeError)
-

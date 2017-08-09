@@ -15,8 +15,6 @@ except BaseException:
 import pprint
 
 from biokbase.workspace.client import Workspace as workspaceService
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from ExpressionAPI.ExpressionAPIImpl import ExpressionAPI
 from ExpressionAPI.ExpressionAPIServer import MethodContext
 from ExpressionAPI.authclient import KBaseAuth as _KBaseAuth
@@ -51,13 +49,9 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
         cls.wsClient = workspaceService(cls.wsURL)
         cls.serviceImpl = ExpressionAPI(cls.cfg)
         cls.scratch = cls.cfg['scratch']
-        cls.callback_url = os.environ['SDK_CALLBACK_URL']
-        cls.dfu = DataFileUtil(cls.callback_url)
-        cls.gfu = GenomeFileUtil(cls.callback_url)
         suffix = int(time.time() * 1000)
         cls.wsName = "test_exprAPI_" + str(suffix)
         cls.wsClient.create_workspace({'workspace': cls.wsName})
-        #cls.setupdata()
 
     @classmethod
     def tearDownClass(cls):
@@ -77,20 +71,6 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    @classmethod
-    def setupdata(cls):
-        # upload genome object
-
-        genbank_file_name = 'minimal.gbff'
-        genbank_file_path = os.path.join(cls.scratch, genbank_file_name)
-        shutil.copy(os.path.join('data', genbank_file_name), genbank_file_path)
-
-        genome_object_name = 'test_Genome'
-        cls.genome_ref = cls.gfu.genbank_to_genome({'file': {'path': genbank_file_path},
-                                                    'workspace_name': cls.wsName,
-                                                    'genome_name': genome_object_name
-                                                    })['genome_ref']
-
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
 
     def get_diff_expr_matrix_success(self, input_diffexprmatrixset_ref, output_obj_name):
@@ -104,14 +84,7 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
 
         getDiffExprMat_retVal = self.getImpl().get_differentialExpressionMatrix(self.ctx, params)[0]
 
-        inputObj = self.dfu.get_objects(
-                                    {'object_refs': [input_diffexprmatrixset_ref]})['data'][0]
-
         pp = pprint.PrettyPrinter(depth=6)
-
-        print("============ INPUT EXPRESSION SET OBJECT ==============")
-        pp.pprint(inputObj)
-        print("==========================================================")
 
         dem_json = getDiffExprMat_retVal.get('json_filepath')
         plot_data = getDiffExprMat_retVal.get('volcano_plot_data')
@@ -121,7 +94,6 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
         pp.pprint(plot_data)
         print("==========================================================")
         '''
-
         print("============ OUTPUT JSON OBJECT ==============")
         pp.pprint(dem_json)
         print("==========================================================")
