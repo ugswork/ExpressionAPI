@@ -108,9 +108,9 @@ sub new
 
 
 
-=head2 get_differentialExpressionMatrix
+=head2 get_differentialExpressionMatrixSet
 
-  $return = $obj->get_differentialExpressionMatrix($params)
+  $return = $obj->get_differentialExpressionMatrixSet($params)
 
 =over 4
 
@@ -152,7 +152,7 @@ getDiffExprMatrixOutput is a reference to a hash where the following keys are de
 
 =cut
 
- sub get_differentialExpressionMatrix
+ sub get_differentialExpressionMatrixSet
 {
     my($self, @args) = @_;
 
@@ -161,7 +161,7 @@ getDiffExprMatrixOutput is a reference to a hash where the following keys are de
     if ((my $n = @args) != 1)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function get_differentialExpressionMatrix (received $n, expecting 1)");
+							       "Invalid argument count for function get_differentialExpressionMatrixSet (received $n, expecting 1)");
     }
     {
 	my($params) = @args;
@@ -169,31 +169,31 @@ getDiffExprMatrixOutput is a reference to a hash where the following keys are de
 	my @_bad_arguments;
         (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
         if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to get_differentialExpressionMatrix:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    my $msg = "Invalid arguments passed to get_differentialExpressionMatrixSet:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'get_differentialExpressionMatrix');
+								   method_name => 'get_differentialExpressionMatrixSet');
 	}
     }
 
     my $url = $self->{url};
     my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "ExpressionAPI.get_differentialExpressionMatrix",
+	    method => "ExpressionAPI.get_differentialExpressionMatrixSet",
 	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
 	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
 					       code => $result->content->{error}->{code},
-					       method_name => 'get_differentialExpressionMatrix',
+					       method_name => 'get_differentialExpressionMatrixSet',
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
 	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method get_differentialExpressionMatrix",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method get_differentialExpressionMatrixSet",
 					    status_line => $self->{client}->status_line,
-					    method_name => 'get_differentialExpressionMatrix',
+					    method_name => 'get_differentialExpressionMatrixSet',
 				       );
     }
 }
@@ -241,16 +241,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'get_differentialExpressionMatrix',
+                method_name => 'get_differentialExpressionMatrixSet',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method get_differentialExpressionMatrix",
+            error => "Error invoking method get_differentialExpressionMatrixSet",
             status_line => $self->{client}->status_line,
-            method_name => 'get_differentialExpressionMatrix',
+            method_name => 'get_differentialExpressionMatrixSet',
         );
     }
 }

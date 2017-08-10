@@ -24,7 +24,7 @@ module ExpressionAPI {
 
     } getDiffExprMatrixOutput;
 
-    funcdef  get_differentialExpressionMatrix(getDiffExprMatrixParams params)
-                                     returns (getDiffExprMatrixOutput)
-                                     authentication required;
+    funcdef  get_differentialExpressionMatrixSet(getDiffExprMatrixParams params)
+                                        returns (getDiffExprMatrixOutput)
+                                        authentication required;
 };

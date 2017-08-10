@@ -50,8 +50,6 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
         cls.serviceImpl = ExpressionAPI(cls.cfg)
         cls.scratch = cls.cfg['scratch']
         suffix = int(time.time() * 1000)
-        cls.wsName = "test_exprAPI_" + str(suffix)
-        cls.wsClient.create_workspace({'workspace': cls.wsName})
 
     @classmethod
     def tearDownClass(cls):
@@ -73,20 +71,18 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
 
-    def get_diff_expr_matrix_success(self, input_diffexprmatrixset_ref, output_obj_name):
+    def get_diff_expr_matrix_success(self, input_diffexprmatrixset_ref):
 
         test_name = inspect.stack()[1][3]
         print('\n*** starting expected get diff expr matrix success test: ' + test_name + ' *****************')
 
-        params = {'diffExprMatrixSet_ref': input_diffexprmatrixset_ref,
-                  'workspace_name': self.getWsName()
+        params = {'diffExprMatrixSet_ref': input_diffexprmatrixset_ref
                   }
 
-        getDiffExprMat_retVal = self.getImpl().get_differentialExpressionMatrix(self.ctx, params)[0]
+        getDiffExprMat_retVal = self.getImpl().get_differentialExpressionMatrixSet(self.ctx, params)[0]
 
         pp = pprint.PrettyPrinter(depth=6)
 
-        dem_json = getDiffExprMat_retVal.get('json_filepath')
         plot_data = getDiffExprMat_retVal.get('volcano_plot_data')
 
         '''
@@ -94,17 +90,11 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
         pp.pprint(plot_data)
         print("==========================================================")
         '''
-        print("============ OUTPUT JSON OBJECT ==============")
-        pp.pprint(dem_json)
-        print("==========================================================")
 
-    # Following test uses object refs from a narrative. Comment the next line to run the test
-    #@unittest.skip("skipped test_get_expr_matrix_rnaseq_exprset_success")
-    def test_get_diff_expr_matrix_success(self):
-        """
-        Input object 1: downsized_AT_reads_hisat2_AlignmentSet_stringtie_ExpressionSet (4389/18/2)
-        Input object 2: downsized_AT_reads_tophat_AlignmentSet_cufflinks_ExpressionSet (4389/45/1)
-        """
+    # Following test uses object refs from a narrative in appdev. Comment the next line to run the test
+    @unittest.skip("skipped test_get_expr_matrix_rnaseq_exprset_success")
+    def test_get_appdev_diff_expr_matrix_success(self):
+
         appdev_diffexpr_matrixset_obj_ref = '5264/11/1'
         appdev_diffexpr_matrixset_obj_ref = '5264/7/2'
         appdev_diffexpr_matrixset_obj_name = 'cuffdiff_diff_exp_out'
@@ -112,9 +102,15 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
         appdev_three_by_two_diffexpr_matrixset_obj_ref = '5264/17/1'
         appdev_three_by_two_diffexpr_matrixset_obj_name = 'three_by_two_diffexp_output'
 
-        self.get_diff_expr_matrix_success(appdev_three_by_two_diffexpr_matrixset_obj_ref,
-                                          'rnaseq_exprset_exprmat_output')
+        self.get_diff_expr_matrix_success(appdev_three_by_two_diffexpr_matrixset_obj_ref)
 
+    # Following test uses object refs from a narrative in ci. Comment the next line to run the test
+    #@unittest.skip("skipped test_get_expr_matrix_rnaseq_exprset_success")
+    def test_get_ci_diff_expr_matrix_success(self):
+
+        ci_diffexpr_matrixset_obj_ref = '19647/7/5'
+
+        self.get_diff_expr_matrix_success(ci_diffexpr_matrixset_obj_ref)
 
     '''
     def fail_getDiffExprMat(self, params, error, exception=ValueError, do_startswith=False):
@@ -123,7 +119,7 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
         print('\n*** starting expected get Expression Matrix fail test: ' + test_name + ' **********************')
 
         with self.assertRaises(exception) as context:
-            self.getImpl().get_differentialExpressionMatrix(self.ctx, params)
+            self.getImpl().get_differentialExpressionMatrixSet(self.ctx, params)
         if do_startswith:
             self.assertTrue(str(context.exception.message).startswith(error),
                             "Error message {} does not start with {}".format(
@@ -135,8 +131,7 @@ class DiffExprMatrixUtilsTest(unittest.TestCase):
     def test_getDiffExprMat_fail_no_ws_name(self):
         self.fail_getDiffExprMat(
             {
-                'diffExprMatrixSet_ref': '1/1/1',
-                'output_obj_name': 'test_exprMatrix'
+                'diffExprMatrixSet_ref': '1/1/1'
             },
             '"workspace_name" parameter is required, but missing')
 

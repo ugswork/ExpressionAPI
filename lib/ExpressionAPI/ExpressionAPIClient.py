@@ -33,7 +33,7 @@ class ExpressionAPI(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
-    def get_differentialExpressionMatrix(self, params, context=None):
+    def get_differentialExpressionMatrixSet(self, params, context=None):
         """
         :param params: instance of type "getDiffExprMatrixParams" (*
            Following are the required input parameters to get Differential
@@ -44,7 +44,7 @@ class ExpressionAPI(object):
            "json_filepath" of String
         """
         return self._client.call_method(
-            'ExpressionAPI.get_differentialExpressionMatrix',
+            'ExpressionAPI.get_differentialExpressionMatrixSet',
             [params], self._service_ver, context)
 
     def status(self, context=None):

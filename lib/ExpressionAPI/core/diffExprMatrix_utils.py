@@ -77,7 +77,7 @@ class DiffExprMatrixUtils:
                             'or KBaseSets.ExpressionSet')
         return expr_set_data
 
-    def get_diffexpr_matrix(self, params, token):
+    def get_diffexpr_matrixset(self, params, token):
 
         self.ws_client = Workspace(self.ws_url, token=token)
 
@@ -125,11 +125,8 @@ class DiffExprMatrixUtils:
             diffexprmat_dict['voldata'] = voldata
             diffexprmatset_list.append(diffexprmat_dict)
 
-        json_outfile = os.path.join(self.scratch, 'dems.json')
-        with open(json_outfile, 'w+') as outfile:
-            json.dump(diffexprmatset_list, outfile, sort_keys=True, indent=4)
+        return diffexprmatset_list
 
-        return diffexprmatset_list, json_outfile
 
 
 
