@@ -20,7 +20,6 @@ class DiffExprMatrixUtils:
         self.logger = logger
         self.scratch = os.path.join(config['scratch'], 'DEM_' + str(uuid.uuid4()))
         self.ws_url = config['workspace-url']
-        self.ws_client = Workspace(self.ws_url)
         self._mkdir_p(self.scratch)
         pass
 
@@ -78,7 +77,9 @@ class DiffExprMatrixUtils:
                             'or KBaseSets.ExpressionSet')
         return expr_set_data
 
-    def get_diffexpr_matrix(self, params):
+    def get_diffexpr_matrix(self, params, token):
+
+        self.ws_client = Workspace(self.ws_url, token=token)
 
         col_names = {'gene_id': 'gene',
                      'log2_fold_change': 'log2fc_f',

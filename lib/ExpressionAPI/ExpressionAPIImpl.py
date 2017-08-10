@@ -25,7 +25,7 @@ class ExpressionAPI:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/ugswork/ExpressionAPI.git"
-    GIT_COMMIT_HASH = "d406ee68b7e026d08d558f44b76d5ecfbaa4eb6c"
+    GIT_COMMIT_HASH = "ee2257b6591c7f2c8dfc481db02d48babcd5e285"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -65,7 +65,7 @@ class ExpressionAPI:
         # return variables are: returnVal
         #BEGIN get_differentialExpressionMatrix
 
-        plot_data, dems_json = self.diffexpr_matrix_utils.get_diffexpr_matrix(params)
+        plot_data, dems_json = self.diffexpr_matrix_utils.get_diffexpr_matrix(params, ctx['token'])
 
         returnVal = {'volcano_plot_data': plot_data,
                      'json_filepath': dems_json}
