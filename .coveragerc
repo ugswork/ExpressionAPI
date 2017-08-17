@@ -1,10 +1,20 @@
 [run]
-include =
-    lib/ExpressionAPI/*
-    /kb/module/lib/ExpressionAPI/*
+branch = True
+
+omit =
+    /kb/module/lib/ExpressionAPI/authclient.py
+    /kb/module/lib/ExpressionAPI/baseclient.py
+    /kb/module/lib/ExpressionAPI/ExpressionAPIClient.py
+    /kb/module/lib/ExpressionAPI/ExpressionAPIServer.py
+source = /kb/module/lib/ExpressionAPI
+
 
 [report]
 # Regexes for lines to exclude from consideration
 exclude_lines =
     # Have to re-enable the standard pragma
     pragma: no cover
+    # Don't complain if tests don't hit defensive assertion code:
+    raise NotImplementedError
+
+show_missing = 1
